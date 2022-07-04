@@ -11,9 +11,9 @@ This plugin has the following commands:
 
 **mstf_GetCenterOfMAss :** calculates the center of the volume and adds a point on the location, also promts the value of the volume.  Mass calculation option will be available soon. 
 
-**Mstf_NameSerialObjects :** Seçilen nesneleri seçildikleri sıraya göre bir ön isime eklenen tam sayılarla isimlendirir. Örn. Fr-1 Fr-2 Fr-3...
+**Mstf_NameSerialObjects :** Sets the name attributes of the selected objects by adding serial index (aligned with the sequence of selection) to a user specified prefix. Example: Fr-1 Fr-2 Fr-3...
 
-**Mstf_NameSerialObjects :** Seçilen ünesnelerin merkez noktasında nesnenin ismini gösteren bir TextDot nesnesini etiket olarak ekler
+**Mstf_NameSerialObjects :** Creates TextDot containing the names of the selected objects as a label at the geometric center of the bounding box of each object.
 
 **Mstf_Help :** Shows the information about the plugin
 
