@@ -12,3 +12,17 @@ This plugin has the following commands:
 **Mstf_NameSerialObjects :** Seçilen nesneleri seçildikleri sıraya göre bir ön isime eklenen tam sayılarla isimlendirir. Örn. Fr-1 Fr-2 Fr-3...
 
 **Mstf_NameSerialObjects :** Seçilen ünesnelerin merkez noktasında nesnenin ismini gösteren bir TextDot nesnesini etiket olarak ekler
+
+**Mstf_Help :** Shows the information about the plugin
+
+## Adding Plugin to RhinoCeros
+
+Insert the command "PluginManager" into the RhinoCeros command console
+
+![image](https://user-images.githubusercontent.com/46689277/177102507-ac7f5b13-2206-4d55-939d-c803ab006ce1.png)
+
+Click onto the Install button under the PluginManager window.
+
+![RhinoManager_3](https://user-images.githubusercontent.com/46689277/177102729-f5fb7db8-f2e7-4903-be24-4cbbb52ab8f8.PNG)
+
+Find the MstfRhinoPlugin1.rhp file and select, then quit by pressing OK button. The plugin methods should be ready to be used.
