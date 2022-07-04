@@ -84,12 +84,8 @@ namespace MstfRhinoPlugin1
             {
                 RhinoApp.WriteLine("The thickness is not defined for a surface");
             }
-
-
             return thickness;
         }
-
-
     }
 
 
@@ -108,9 +104,6 @@ namespace MstfRhinoPlugin1
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-
-
-
             RhinoApp.WriteLine("Theis command will define a thickness property to the selected surface", EnglishName);
 
             Rhino.DocObjects.ObjRef[] obref;
@@ -129,14 +122,10 @@ namespace MstfRhinoPlugin1
                 RhinoApp.WriteLine("Yüzey seçilmedi {0}", rc.ToString());
                 return Result.Cancel;
             }
-
-
             rc = Rhino.Input.RhinoGet.GetNumber("Enter Thickness value in mm", false, ref thickness);
-
 
             if (rc != Result.Success)
                 return rc;
-
 
             foreach (Rhino.DocObjects.ObjRef obj in obref)
             {
@@ -146,14 +135,11 @@ namespace MstfRhinoPlugin1
 
                 surfaceInp.SetUserString("thickness", thickness.ToString());
 
-
                 if (!Double.TryParse(surfaceInp.GetUserString("thickness"), out thickness))
                 {
                     RhinoApp.WriteLine("The thickness is not defined for an object");
                 }
-
                 RhinoApp.WriteLine("The thickness of an object is set to {0}", thickness);
-
             }
             // TODO: complete command.
             return Result.Success;
@@ -193,8 +179,6 @@ namespace MstfRhinoPlugin1
 
             List<string> lines = new List<string>();
 
-
-
             RhinoApp.WriteLine("Theis command will calculate center of mass of the surfaces with defined thicknesses", EnglishName);
 
             Result rc = Rhino.Input.RhinoGet.GetMultipleObjects("Select object", true, Rhino.DocObjects.ObjectType.Surface, out obref);
@@ -223,15 +207,10 @@ namespace MstfRhinoPlugin1
                 sumOfMoment[0] += M * C.X;
                 sumOfMoment[1] += M * C.Y;
                 sumOfMoment[2] += M * C.Z;
-
-
                 lines.Add($"{obj.Object().Name};{M}; {C.X};  {C.Y};  {C.Z};");
-
-
             }
-
+            
             File.AppendAllLines(fileName, lines);
-
 
             centerOfMass.X = sumOfMoment[0] / sumOfMass;
 
@@ -239,9 +218,7 @@ namespace MstfRhinoPlugin1
 
             centerOfMass.Z = sumOfMoment[2] / sumOfMass;
 
-
             RhinoApp.WriteLine($"The calculated Volume is {sumOfMass};");
-
 
             RhinoApp.WriteLine($"Center of mass is {centerOfMass.X};  {centerOfMass.Y};  {centerOfMass.Z};");
 
@@ -267,8 +244,6 @@ namespace MstfRhinoPlugin1
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-
-
             RhinoApp.WriteLine($"This plugin has the following commands:");
             RhinoApp.WriteLine($"Commands:  \n mstf_SetThicknesToSurface : sets thicknes value to selected surfaces \n " +
                 $"mstf_MassCalculate : for now just calculates volume and prompts the result to console. Mass calculation option will be available soon. \n" +
@@ -296,8 +271,6 @@ namespace MstfRhinoPlugin1
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-
-
             Rhino.DocObjects.ObjRef[] objrefs;
 
             String prefixName = "";
@@ -326,7 +299,6 @@ namespace MstfRhinoPlugin1
 
             foreach (Rhino.DocObjects.ObjRef objref in objrefs)
             {
-
                 var obj = objref.Object();
 
                 obj.Attributes.Name = prefixName + counter.ToString(indexFormatter);
@@ -342,8 +314,6 @@ namespace MstfRhinoPlugin1
 
             return Result.Success;
         }
-
-
     }
 
     public class MyRhinoCommand6 : Command
@@ -360,8 +330,6 @@ namespace MstfRhinoPlugin1
 
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
-
-
             Rhino.DocObjects.ObjRef[] objrefs;
             Double textHeight = 20;
 
@@ -375,7 +343,6 @@ namespace MstfRhinoPlugin1
             if (objrefs == null || objrefs.Length < 1)
                 return Result.Failure;
 
-
             RhinoApp.WriteLine($"{objrefs.Length} adet nesne seçildi");
 
             RhinoApp.WriteLine($"Name özelliği tanımlanmış olan nesneler etiketlenecek (textDot)");
@@ -385,7 +352,6 @@ namespace MstfRhinoPlugin1
 
             foreach (Rhino.DocObjects.ObjRef objref in objrefs)
             {
-
                 var obj = objref.Object();
 
                 if (obj.Name != "" && obj.Name != null)
@@ -395,20 +361,13 @@ namespace MstfRhinoPlugin1
                     var label = new TextDot(obj.Name, box.Center);
 
                     activeDoc.Objects.Add(label);
-
-
                 }
 
                 RhinoApp.WriteLine($"{obj.Name} etiketlendi");
-
             }
-
-            
-
             RhinoApp.WriteLine("etiketleme tamamlandı");
 
             return Result.Success;
         }
-
     }
 }
