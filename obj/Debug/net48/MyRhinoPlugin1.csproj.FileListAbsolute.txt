@@ -1,0 +1,9 @@
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\bin\Debug\net48\MyRhinoPlugin1.rhp
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\bin\Debug\net48\MyRhinoPlugin1.pdb
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\obj\Debug\net48\MyRhinoPlugin1.csproj.AssemblyReference.cache
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\obj\Debug\net48\MyRhinoPlugin1.GeneratedMSBuildEditorConfig.editorconfig
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\obj\Debug\net48\MyRhinoPlugin1.AssemblyInfoInputs.cache
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\obj\Debug\net48\MyRhinoPlugin1.AssemblyInfo.cs
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\obj\Debug\net48\MyRhinoPlugin1.csproj.CoreCompileInputs.cache
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\obj\Debug\net48\MyRhinoPlugin1.rhp
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MyRhinoPlugin1\obj\Debug\net48\MyRhinoPlugin1.pdb
