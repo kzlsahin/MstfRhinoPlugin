@@ -348,7 +348,7 @@ namespace MstfRhinoPlugin1
             RhinoApp.WriteLine($"Name özelliği tanımlanmış olan nesneler etiketlenecek (textDot)");
 
 
-            RhinoGet.GetNumber("Ön isim giriniz", false, ref textHeight);
+            RhinoGet.GetNumber("Font karakter yüksekliği girebilirsiniz", false, ref textHeight);
 
             foreach (Rhino.DocObjects.ObjRef objref in objrefs)
             {
