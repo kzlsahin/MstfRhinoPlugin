@@ -370,4 +370,78 @@ namespace MstfRhinoPlugin1
             return Result.Success;
         }
     }
+     public class MyRhinoCommand7 : Command
+    {
+        public MyRhinoCommand7()
+        {
+            Instance = this;
+        }
+
+        ///<summary>The only instance of the MyCommand command.</summary>
+        public static MyRhinoCommand7 Instance { get; private set; }
+
+        public override string EnglishName => "Mstf_SelectObjectsWithThickness";
+
+        protected override Result RunCommand(RhinoDoc doc, RunMode mode)
+        {
+            Double thickness = 0;
+
+            var activeDoc = RhinoDoc.ActiveDoc;
+
+            Result rc = RhinoGet.GetNumber("Kalınlık değeri giriniz", false, ref thickness);
+
+            RhinoApp.WriteLine($"Seçilen değer {thickness}");
+
+
+            //if (rc != Result.Success)
+            //    return rc;
+
+
+            /*var selectedObjects = from obj in activeDoc.Objects.GetObjectList(Rhino.DocObjects.ObjectType.AnyObject)
+                                  where obj.Geometry.GetUserString("thickness") == thicknessStr
+                                  select obj;
+            */
+
+            RhinoApp.WriteLine(activeDoc.Objects.GetObjectList(Rhino.DocObjects.ObjectType.AnyObject).Count<Rhino.DocObjects.RhinoObject>().ToString());
+
+            foreach (Rhino.DocObjects.BrepObject brepObj in activeDoc.Objects.GetObjectList(Rhino.DocObjects.ObjectType.Brep))
+            {
+                if(!brepObj.BrepGeometry.IsSurface)
+                {
+                    continue;
+                }
+
+                foreach (Surface surface in brepObj.BrepGeometry.Faces)
+                {
+                    string str = surface.GetUserString("thickness");
+
+                    RhinoApp.WriteLine($"The thickness: {str} ");
+
+                    if (!Double.TryParse(str, out double t))
+                    {
+                        RhinoApp.WriteLine("The thickness is not readable for a surface");
+                    }
+                    RhinoApp.WriteLine($"thickness parsed: {t}");
+                    if (!(t == thickness))
+                    {
+                        RhinoApp.WriteLine("not equal");
+                        continue;
+                    }
+                    if (brepObj.Select(true, true) != 0)
+                    {
+                        RhinoApp.WriteLine("ok!");
+                    }
+                    else
+                    {
+
+                        return Result.Failure;
+                    }
+
+                }
+            }
+            doc.Views.Redraw();
+            return Result.Success;
+        }
+
+    }
 }
