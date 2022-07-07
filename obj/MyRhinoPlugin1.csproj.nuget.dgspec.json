@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\MyWorkSpace\\Dotnet\\MyRhinoApp1\\MyRhinoPlugin1.csproj": {}
+    "C:\\MyWorkSpace\\Dotnet\\MstfRhinoPlugin\\MyRhinoPlugin1.csproj": {}
   },
   "projects": {
-    "C:\\MyWorkSpace\\Dotnet\\MyRhinoApp1\\MyRhinoPlugin1.csproj": {
+    "C:\\MyWorkSpace\\Dotnet\\MstfRhinoPlugin\\MyRhinoPlugin1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\MyWorkSpace\\Dotnet\\MyRhinoApp1\\MyRhinoPlugin1.csproj",
+        "projectUniqueName": "C:\\MyWorkSpace\\Dotnet\\MstfRhinoPlugin\\MyRhinoPlugin1.csproj",
         "projectName": "MyRhinoPlugin1",
-        "projectPath": "C:\\MyWorkSpace\\Dotnet\\MyRhinoApp1\\MyRhinoPlugin1.csproj",
+        "projectPath": "C:\\MyWorkSpace\\Dotnet\\MstfRhinoPlugin\\MyRhinoPlugin1.csproj",
         "packagesPath": "C:\\Users\\deniz\\.nuget\\packages\\",
-        "outputPath": "C:\\MyWorkSpace\\Dotnet\\MyRhinoApp1\\obj\\",
+        "outputPath": "C:\\MyWorkSpace\\Dotnet\\MstfRhinoPlugin\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
