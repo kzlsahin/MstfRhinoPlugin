@@ -444,4 +444,133 @@ namespace MstfRhinoPlugin1
         }
 
     }
+    
+    public class MyRhinoCommand8 : Command
+    {
+        public MyRhinoCommand8()
+        {
+            Instance = this;
+        }
+
+        ///<summary>The only instance of the MyCommand command.</summary>
+        public static MyRhinoCommand8 Instance { get; private set; }
+
+        public override string EnglishName => "Mstf_FilterSelectedByThickness";
+
+        protected override Result RunCommand(RhinoDoc doc, RunMode mode)
+        {
+            Double thickness = 0;
+
+            var activeDoc = RhinoDoc.ActiveDoc;
+
+            Result rc = RhinoGet.GetNumber("v02 Kalınlık değeri giriniz", false, ref thickness);
+
+            RhinoApp.WriteLine($"Seçilen değer {thickness}");
+
+
+            //if (rc != Result.Success)
+            //    return rc;
+
+
+            /*var selectedObjects = from obj in activeDoc.Objects.GetObjectList(Rhino.DocObjects.ObjectType.AnyObject)
+                                  where obj.Geometry.GetUserString("thickness") == thicknessStr
+                                  select obj;
+            */
+
+            rc = Rhino.Input.RhinoGet.GetMultipleObjects("İçinden arama yapılacak nesneleri seçiniz", true, Rhino.DocObjects.ObjectType.Surface, out Rhino.DocObjects.ObjRef[] objRefs);
+
+            if (rc != Result.Success)
+                return rc;
+            if (objRefs == null || objRefs.Count() == 0)
+            {
+                RhinoApp.WriteLine("Yüzey seçilmedi {0}", rc.ToString());
+                return Result.Cancel;
+            }
+            foreach (Rhino.DocObjects.ObjRef obj in objRefs)
+            {
+                Surface surface = obj.Surface();
+
+                string str = surface.GetUserString("thickness");
+
+                if (!Double.TryParse(str, out double t))
+                {
+                    continue;
+                }
+                RhinoApp.WriteLine($"The thickness: {str} ");
+                RhinoApp.WriteLine($"thickness parsed: {t}");
+
+                if (!(t == thickness))
+                {
+                    RhinoApp.WriteLine("not equal");
+                    continue;
+                }
+
+                if (obj.Object().Select(true, true) != 0)
+                {
+                    RhinoApp.WriteLine("ok!");
+                }
+                else
+                {
+                    return Result.Failure;
+                }
+            }
+            doc.Views.Redraw();
+            return Result.Success;
+        }
+
+    }
+    
+    
+    public class MyRhinoCommand9 : Command
+    {
+        public MyRhinoCommand9()
+        {
+            Instance = this;
+        }
+
+        ///<summary>The only instance of the MyCommand command.</summary>
+        public static MyRhinoCommand9 Instance { get; private set; }
+
+        public override string EnglishName => "Mstf_Deneme";
+
+        protected override Result RunCommand(RhinoDoc doc, RunMode mode)
+        {
+
+            Result rc = Rhino.Input.RhinoGet.GetMultipleObjects("İçinden arama yapılacak nesneleri seçiniz", true, Rhino.DocObjects.ObjectType.AnyObject, out Rhino.DocObjects.ObjRef[] objRefs);
+
+            if (rc != Result.Success)
+                return rc;
+            if (objRefs == null || objRefs.Count() == 0)
+            {
+                RhinoApp.WriteLine("Yüzey seçilmedi {0}", rc.ToString());
+                return Result.Cancel;
+            }
+
+            foreach(var obj in objRefs)
+            { 
+                string[] userInput = obj.Object().UserDictionary.Keys ?? new string[1] { "bos" };
+                RhinoApp.WriteLine("{0}", userInput.Length );
+                RhinoApp.WriteLine("and data.");
+                if(obj.Object().UserData.Count() > 0)
+                {
+                    string userData = obj.Object().UserData[0].ToString();
+                    RhinoApp.WriteLine("{0}", userData);
+                }
+                
+            }
+
+            return Result.Success;
+        }
+
+    }
+
+
+    public class Mstf_Tools
+    {
+
+        public static void addAttributeToObjectName(Rhino.DocObjects.RhinoObject rhinoObject)
+        {
+
+        }
+    }
 }
