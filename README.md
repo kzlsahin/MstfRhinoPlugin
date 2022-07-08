@@ -9,11 +9,11 @@ This plugin has the following commands:
 
 **mstf_MassCalculate :** for now just calculates volume and prompts the result to console. Mass calculation option will be available soon.
 
-**mstf_GetCenterOfMAss :** calculates the center of the volume and adds a point on the location, also promts the value of the volume.  Mass calculation option will be available soon. 
+**mstf_GetCenterOfMass :** calculates the center of the volume and adds a point on the location, also promts the value of the volume.  Mass calculation option will be available soon. 
 
 **Mstf_NameSerialObjects :** Sets the name attributes of the selected objects by adding serial index (aligned with the sequence of selection) to a user specified prefix. Example: Fr-1 Fr-2 Fr-3...
 
-**Mstf_NameSerialObjects :** Creates TextDot containing the names of the selected objects as a label at the geometric center of the bounding box of each object.
+**Mstf_LabelSerialObjects :** Creates TextDot containing the names of the selected objects as a label at the geometric center of the bounding box of each object.
 
 **Mstf_Help :** Shows the information about the plugin
 
