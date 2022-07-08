@@ -254,12 +254,9 @@ namespace MstfRhinoPlugin1
             {
                 var obj = objref.Object();
 
-                obj.Attributes.Name = prefixName + counter.ToString(indexFormatter);
+                string name = prefixName + counter.ToString(indexFormatter);
 
-                obj.CommitChanges();
-
-                RhinoApp.WriteLine($"{obj.Name} tanımlandı");
-
+                Mstf_Tools.SetObjectName(obj, name);
                 counter++;
             }
 

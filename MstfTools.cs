@@ -9,21 +9,10 @@ namespace MstfRhinoPlugin1
     {
         public static bool SetAttributeToObjectName(Rhino.DocObjects.RhinoObject rhinoObject, string attributeKey, string attributeValue)
         {
-            bool hasAttribute = false;
+            bool hasAttribute = IsAnyAttributeSet(rhinoObject);
             attributeKey = attributeKey.ToLower();
             attributeValue = attributeValue.ToLower();
-
-            try
-            {
-                hasAttribute = IsAnyAttributeSet(rhinoObject);
-            }
-            catch (Exception e)
-            {
-                RhinoApp.WriteLine(e.Message);
-                RhinoApp.WriteLine("isimsiz öğe var");
-                return false;
-            }
-
+            
             try
             {
                 if (hasAttribute)
@@ -47,6 +36,22 @@ namespace MstfRhinoPlugin1
             return true;
         }
 
+        public static void SetObjectName(Rhino.DocObjects.RhinoObject rhinoObject, string name)
+        {
+            if (rhinoObject.Name == null || rhinoObject.Name == "")
+            {
+                rhinoObject.Attributes.Name = "";
+                rhinoObject.CommitChanges();
+            }
+            else
+            {
+                string attributeString = rhinoObject.Name.Trim().Split('?')[1];
+                rhinoObject.Attributes.Name = name + "?" + attributeString;
+                rhinoObject.CommitChanges();
+            }
+
+        }
+
         public static string GetObjectName(Rhino.DocObjects.RhinoObject rhinoObject)
         {
             if (rhinoObject.Name == null || rhinoObject.Name == "")
@@ -55,6 +60,35 @@ namespace MstfRhinoPlugin1
             }
             return rhinoObject.Name.Trim().Split('?')[0];
         }
+
+        public static string[,] GetAttributes(Rhino.DocObjects.RhinoObject rhinoObject)
+        {
+            bool hasAttributes = IsAnyAttributeSet(rhinoObject);
+
+            if (!hasAttributes) return new string[,] { { "", "" } };
+
+            string[,] attributes;
+            string[] nameWithAttribute = rhinoObject.Name.Split('?');
+
+            if (nameWithAttribute.Length > 2)
+            {
+                RhinoApp.WriteLine("Attribute bilgisi bozulmuş olabilir");
+                return new string[,] { { "", "" } };
+            }
+
+            string[] attributeEntries = nameWithAttribute[1].Split(';');
+            attributes = new string[attributeEntries.Length, 2];
+
+            for (int i = 0; i < attributeEntries.Length; i++)
+            {
+                string[] keyvalue = attributeEntries[i].Trim().Split(':');
+                attributes[i, 0] = keyvalue[0];
+                attributes[i, 1] = keyvalue[1];
+            }
+            return attributes;
+        }
+
+
         public static string GetAttributeValue(Rhino.DocObjects.RhinoObject rhinoObject, string attributeKey)
         {
 
@@ -106,6 +140,7 @@ namespace MstfRhinoPlugin1
             bool hasAttributes = false;
             if (rhinoObject.Name == null || rhinoObject.Name == "")
             {
+                RhinoApp.WriteLine("isimsiz öğe var");
                 return false;
             }
                 try
@@ -145,33 +180,7 @@ namespace MstfRhinoPlugin1
             return false;
         }
 
-        public static string[,] GetAttributes(Rhino.DocObjects.RhinoObject rhinoObject)
-        {
-            bool hasAttributes = IsAnyAttributeSet(rhinoObject);
-
-            if (!hasAttributes) return new string[,] { { "", "" } };
-
-            string[,] attributes;
-            string[] nameWithAttribute = rhinoObject.Name.Split('?');
-
-            if (nameWithAttribute.Length > 2)
-            {
-                RhinoApp.WriteLine("Attribute bilgisi bozulmuş olabilir");
-                return new string[,] { { "", "" } };
-            }
-
-            string[] attributeEntries = nameWithAttribute[1].Split(';');
-            attributes = new string[attributeEntries.Length, 2];
-
-            for (int i = 0; i < attributeEntries.Length; i++)
-            {
-                string[] keyvalue = attributeEntries[i].Trim().Split(':');
-                attributes[i, 0] = keyvalue[0];
-                attributes[i, 1] = keyvalue[1];
-            }
-            return attributes;
-        }
-
+      
         public static (double, Point3d) CalculateSurfaceMass(Rhino.DocObjects.ObjRef obj)
         {
             Double mass = 0;
