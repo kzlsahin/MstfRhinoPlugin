@@ -31,9 +31,7 @@ namespace MstfRhinoPlugin1
 
             Rhino.DocObjects.ObjRef obref;
 
-            Surface surfaceInp;
-
-            Result rc = Rhino.Input.RhinoGet.GetOneObject("Select object", true, Rhino.DocObjects.ObjectType.Surface, out obref);
+            Result rc = RhinoGet.GetOneObject("Select object", true, Rhino.DocObjects.ObjectType.Surface, out obref);
 
             if (rc != Result.Success)
                 return rc;
@@ -43,29 +41,14 @@ namespace MstfRhinoPlugin1
                 RhinoApp.WriteLine("Yüzey seçilmedi {0}", rc.ToString());
                 return Result.Cancel;
             }
-            surfaceInp = obref.Surface();
-
-            RhinoApp.WriteLine("The type of selected object is {0} ", surfaceInp.GetType());
-
-
-            Double thickness;
-            if (!Double.TryParse(surfaceInp.GetUserString("thickness"), out thickness))
-            {
-                RhinoApp.WriteLine("The thickness is not defined");
-            }
 
             doc.Views.Redraw();
 
-            (Double mass, Point3d Centr) = CalculateMass(surfaceInp, thickness);
-
-            RhinoApp.WriteLine("The thickness of the object is {0} and the mass is {1}", thickness, mass);
+            (Double mass, Point3d Centr) = Mstf_Tools.CalculateSurfaceMass(obref);
 
             // ---
             return Result.Success;
         }
-
-
-        
     }
 
 
@@ -92,7 +75,7 @@ namespace MstfRhinoPlugin1
 
             Double thickness = 0;
 
-            Result rc = Rhino.Input.RhinoGet.GetMultipleObjects("Select object", true, Rhino.DocObjects.ObjectType.Surface, out obref);
+            Result rc = RhinoGet.GetMultipleObjects("Select object", true, Rhino.DocObjects.ObjectType.Surface, out obref);
 
             if (rc != Result.Success)
                 return rc;
@@ -102,24 +85,14 @@ namespace MstfRhinoPlugin1
                 RhinoApp.WriteLine("Yüzey seçilmedi {0}", rc.ToString());
                 return Result.Cancel;
             }
-            rc = Rhino.Input.RhinoGet.GetNumber("Enter Thickness value in mm", false, ref thickness);
+            rc = RhinoGet.GetNumber("Enter Thickness value in mm", false, ref thickness);
 
             if (rc != Result.Success)
                 return rc;
 
             foreach (Rhino.DocObjects.ObjRef obj in obref)
             {
-                surfaceInp = obj.Surface();
-
-                RhinoApp.WriteLine("The type of selected object is {0} ", surfaceInp.GetType());
-
-                surfaceInp.SetUserString("thickness", thickness.ToString());
-
-                if (!Double.TryParse(surfaceInp.GetUserString("thickness"), out thickness))
-                {
-                    RhinoApp.WriteLine("The thickness is not defined for an object");
-                }
-                RhinoApp.WriteLine("The thickness of an object is set to {0}", thickness);
+                Mstf_Tools.SetAttributeToObjectName(obj.Object(), "thickness", thickness.ToString()); ;
             }
             // TODO: complete command.
             return Result.Success;
@@ -159,7 +132,7 @@ namespace MstfRhinoPlugin1
 
             List<string> lines = new List<string>();
 
-            RhinoApp.WriteLine("Theis command will calculate center of mass of the surfaces with defined thicknesses", EnglishName);
+            RhinoApp.WriteLine("This command will calculate center of mass of the surfaces with defined thicknesses", EnglishName);
 
             Result rc = Rhino.Input.RhinoGet.GetMultipleObjects("Select object", true, Rhino.DocObjects.ObjectType.Surface, out obref);
 
@@ -178,7 +151,7 @@ namespace MstfRhinoPlugin1
             {
                 Surface surface = obj.Surface();
 
-                (Double M, Point3d C) = MstfRhinoPlugin1Command.CalculateMass(surface, MstfRhinoPlugin1Command.GetThickness(surface));
+                (Double M, Point3d C) = Mstf_Tools.CalculateSurfaceMass(obj);
                 masses.Add(M);
                 centers.Add(C);
 
@@ -281,12 +254,9 @@ namespace MstfRhinoPlugin1
             {
                 var obj = objref.Object();
 
-                obj.Attributes.Name = prefixName + counter.ToString(indexFormatter);
+                string name = prefixName + counter.ToString(indexFormatter);
 
-                obj.CommitChanges();
-
-                RhinoApp.WriteLine($"{obj.Name} tanımlandı");
-
+                Mstf_Tools.SetObjectName(obj, name);
                 counter++;
             }
 
@@ -330,20 +300,21 @@ namespace MstfRhinoPlugin1
 
             RhinoGet.GetNumber("Font karakter yüksekliği girebilirsiniz", false, ref textHeight);
 
+
             foreach (Rhino.DocObjects.ObjRef objref in objrefs)
             {
-                var obj = objref.Object();
-
-                if (obj.Name != "" && obj.Name != null)
+                Rhino.DocObjects.RhinoObject obj = objref.Object();
+                string name = Mstf_Tools.GetObjectName( obj );
+                if (name != string.Empty)
                 {
                     BoundingBox box = obj.Geometry.GetBoundingBox(false);
 
-                    var label = new TextDot(obj.Name, box.Center);
+                    var label = new TextDot(name, box.Center);
 
                     activeDoc.Objects.Add(label);
                 }
 
-                RhinoApp.WriteLine($"{obj.Name} etiketlendi");
+                RhinoApp.WriteLine($"{name} etiketlendi");
             }
             RhinoApp.WriteLine("etiketleme tamamlandı");
 
@@ -391,17 +362,18 @@ namespace MstfRhinoPlugin1
                     continue;
                 }
 
-                foreach (Surface surface in brepObj.BrepGeometry.Faces)
+                string str = Mstf_Tools.GetAttributeValue(brepObj, "thickness");
+
+                RhinoApp.WriteLine($"The thickness: {str} ");
+
+                if (!Double.TryParse(str, out double t))
                 {
-                    string str = surface.GetUserString("thickness");
+                    RhinoApp.WriteLine("The thickness is not readable for a surface");
+                }
+                RhinoApp.WriteLine($"thickness parsed: {t}");
 
-                    RhinoApp.WriteLine($"The thickness: {str} ");
-
-                    if (!Double.TryParse(str, out double t))
-                    {
-                        RhinoApp.WriteLine("The thickness is not readable for a surface");
-                    }
-                    RhinoApp.WriteLine($"thickness parsed: {t}");
+                foreach (Surface surface in brepObj.BrepGeometry.Faces)
+                {  
                     if (!(t == thickness))
                     {
                         RhinoApp.WriteLine("not equal");
@@ -413,10 +385,8 @@ namespace MstfRhinoPlugin1
                     }
                     else
                     {
-
                         return Result.Failure;
                     }
-
                 }
             }
             doc.Views.Redraw();
@@ -457,7 +427,7 @@ namespace MstfRhinoPlugin1
                                   select obj;
             */
 
-            rc = Rhino.Input.RhinoGet.GetMultipleObjects("İçinden arama yapılacak nesneleri seçiniz", true, Rhino.DocObjects.ObjectType.Surface, out Rhino.DocObjects.ObjRef[] objRefs);
+            rc = RhinoGet.GetMultipleObjects("İçinden arama yapılacak nesneleri seçiniz", true, Rhino.DocObjects.ObjectType.Surface, out Rhino.DocObjects.ObjRef[] objRefs);
 
             if (rc != Result.Success)
                 return rc;
@@ -466,17 +436,16 @@ namespace MstfRhinoPlugin1
                 RhinoApp.WriteLine("Yüzey seçilmedi {0}", rc.ToString());
                 return Result.Cancel;
             }
-            foreach (Rhino.DocObjects.ObjRef obj in objRefs)
+            foreach (Rhino.DocObjects.ObjRef objRef in objRefs)
             {
-                Surface surface = obj.Surface();
+                var obj = objRef.Object();
 
-                string str = surface.GetUserString("thickness");
+                string str = Mstf_Tools.GetAttributeValue(obj, "thickness");
 
                 if (!Double.TryParse(str, out double t))
                 {
-                    continue;
+                    RhinoApp.WriteLine("The thickness is not readable for a surface");
                 }
-                RhinoApp.WriteLine($"The thickness: {str} ");
                 RhinoApp.WriteLine($"thickness parsed: {t}");
 
                 if (!(t == thickness))
@@ -484,8 +453,7 @@ namespace MstfRhinoPlugin1
                     RhinoApp.WriteLine("not equal");
                     continue;
                 }
-
-                if (obj.Object().Select(true, true) != 0)
+                if (obj.Select(true, true) != 0)
                 {
                     RhinoApp.WriteLine("ok!");
                 }
@@ -528,13 +496,13 @@ namespace MstfRhinoPlugin1
 
             foreach(var obj in objRefs)
             {
-                Mstf_Tools.AddAttributeToObjectName(obj.Object(), "kim", "Mustafa");
+                Mstf_Tools.SetAttributeToObjectName(obj.Object(), "kim", "Mustafa");
                 
             }
 
             foreach (var obj in objRefs)
             {
-                RhinoApp.WriteLine(Mstf_Tools.GetValueOf(obj.Object(), "kim"  ));
+                RhinoApp.WriteLine(Mstf_Tools.GetAttributeValue(obj.Object(), "kim"  ));
 
             }
 
@@ -542,136 +510,5 @@ namespace MstfRhinoPlugin1
         }
 
     }
-    public class Mstf_Tools
-    {
-        public static bool AddAttributeToObjectName(Rhino.DocObjects.RhinoObject rhinoObject, string attributeKey, string attributeValue)
-        {
-            bool hasAttribute = false;
-            try
-            {
-                hasAttribute = rhinoObject.Name.Contains("?");
-            }
-            catch (Exception e)
-            {
-                RhinoApp.WriteLine(e.Message);
-                RhinoApp.WriteLine("isimsiz öğe var");
-                return false;
-            }
-            try
-            {
-                if (hasAttribute)
-                {
-                    rhinoObject.Attributes.Name += $";{attributeKey}:{attributeValue}";
-
-                    rhinoObject.CommitChanges();
-                }
-                else
-                {
-                    rhinoObject.Attributes.Name += $"?{attributeKey}:{attributeValue}";
-
-                    rhinoObject.CommitChanges();
-                }
-            }
-            catch(Exception e)
-            {
-                RhinoApp.WriteLine(e.Message);
-                return false;
-            }
-            return true;
-        }
-
-        public static string GetObjectName(Rhino.DocObjects.RhinoObject rhinoObject)
-        {
-            return rhinoObject.Name.Trim().Split('?')[0];
-        }
-        public static string GetValueOf(Rhino.DocObjects.RhinoObject rhinoObject, string attributeKey)
-        {
-            bool hasAttributes = rhinoObject.Name.Contains("?");
-            string[] attributes;
-
-            if (!hasAttributes)
-            {
-                return string.Empty;
-            }
-            string[] nameWithAttribute = rhinoObject.Name.Split('?');
-
-            if (nameWithAttribute.Length > 2)
-            {
-                return string.Empty;
-            }
-
-            attributes = nameWithAttribute[1].Split(';');
-
-            foreach (string attribute in attributes)
-            {
-                string[] KeyValue = attribute.Split(':');
-                string key = KeyValue[0];
-
-                if (key == attributeKey)
-                {
-                    return KeyValue[1];
-                }
-            }
-            return string.Empty;
-        }
-
-        public static bool RemoveAttributeToObjectName(Rhino.DocObjects.RhinoObject rhinoObject, string attributeKey)
-        {
-
-            bool hasAttributes = rhinoObject.Name.Contains("?");
-            string[] attributes;
-            string name;
-
-            if (!hasAttributes)
-            {
-                return false;
-            }
-            string[] nameWithAttribute = rhinoObject.Name.Split('?');
-
-            if (nameWithAttribute.Length > 2)
-            {
-                return false;
-            }
-
-            attributes = nameWithAttribute[1].Split(';');
-            string attributeToRemove;
-
-            foreach(string attribute in attributes)
-            {
-                string[] KeyValue = attribute.Split(':');
-                string key = KeyValue[0];
-
-                if (key == attributeKey)
-                {
-                    attributeToRemove = attribute;
-                    rhinoObject.Attributes.Name.Replace(attributeToRemove, "");
-                    rhinoObject.CommitChanges();
-                    break;
-                }
-            }
-            return true;
-        }
-
-        public static (Double, Point3d) CalculateMass(Surface obj, Double t)
-        {
-            Double mass = 0;
-
-            AreaMassProperties AMProp = AreaMassProperties.Compute(obj);
-
-            mass = AMProp.Area * t;
-
-            return (mass, AMProp.Centroid);
-        }
-
-        public static Double GetThickness(Surface surf)
-        {
-
-            Double thickness;
-            if (!Double.TryParse(surf.GetUserString("thickness"), out thickness))
-            {
-                RhinoApp.WriteLine("The thickness is not defined for a surface");
-            }
-            return thickness;
-        }
-    }
+    
 }

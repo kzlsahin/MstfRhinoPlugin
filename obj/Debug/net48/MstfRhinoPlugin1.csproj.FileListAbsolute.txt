@@ -7,3 +7,12 @@ C:\MyWorkSpace\Dotnet\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.AssemblyI
 C:\MyWorkSpace\Dotnet\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.csproj.CoreCompileInputs.cache
 C:\MyWorkSpace\Dotnet\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.rhp
 C:\MyWorkSpace\Dotnet\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.pdb
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\bin\Debug\net48\MstfRhinoPlugin1.rhp
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\bin\Debug\net48\MstfRhinoPlugin1.pdb
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.csproj.AssemblyReference.cache
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.GeneratedMSBuildEditorConfig.editorconfig
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.AssemblyInfoInputs.cache
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.AssemblyInfo.cs
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.csproj.CoreCompileInputs.cache
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.rhp
+D:\mustafa_workspace\dotnet\RhinoPlugin1\MstfRhinoPlugin\obj\Debug\net48\MstfRhinoPlugin1.pdb
