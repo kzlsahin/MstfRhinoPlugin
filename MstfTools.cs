@@ -40,16 +40,13 @@ namespace MstfRhinoPlugin1
         {
             if (rhinoObject.Name == null || rhinoObject.Name == "")
             {
-                rhinoObject.Attributes.Name = "";
+                rhinoObject.Attributes.Name = name;
                 rhinoObject.CommitChanges();
+                return;
             }
-            else
-            {
                 string attributeString = rhinoObject.Name.Trim().Split('?')[1];
                 rhinoObject.Attributes.Name = name + "?" + attributeString;
                 rhinoObject.CommitChanges();
-            }
-
         }
 
         public static string GetObjectName(Rhino.DocObjects.RhinoObject rhinoObject)
