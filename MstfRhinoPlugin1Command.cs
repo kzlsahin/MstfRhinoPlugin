@@ -253,13 +253,12 @@ namespace MstfRhinoPlugin1
             foreach (Rhino.DocObjects.ObjRef objref in objrefs)
             {
                 var obj = objref.Object();
-
                 string name = prefixName + counter.ToString(indexFormatter);
 
                 Mstf_Tools.SetObjectName(obj, name);
+
                 counter++;
             }
-
             RhinoApp.WriteLine("İsimler nesnelere tanımlandı");
 
             return Result.Success;
@@ -277,7 +276,6 @@ namespace MstfRhinoPlugin1
         public static MyRhinoCommand6 Instance { get; private set; }
 
         public override string EnglishName => "Mstf_LabelSerialObjects";
-
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
         {
             Rhino.DocObjects.ObjRef[] objrefs;
@@ -465,50 +463,6 @@ namespace MstfRhinoPlugin1
             doc.Views.Redraw();
             return Result.Success;
         }
-
-    }
-    
-    
-    public class MyRhinoCommand9 : Command
-    {
-        public MyRhinoCommand9()
-        {
-            Instance = this;
-        }
-
-        ///<summary>The only instance of the MyCommand command.</summary>
-        public static MyRhinoCommand9 Instance { get; private set; }
-
-        public override string EnglishName => "Mstf_Deneme";
-
-        protected override Result RunCommand(RhinoDoc doc, RunMode mode)
-        {
-
-            Result rc = Rhino.Input.RhinoGet.GetMultipleObjects("İçinden arama yapılacak nesneleri seçiniz", true, Rhino.DocObjects.ObjectType.AnyObject, out Rhino.DocObjects.ObjRef[] objRefs);
-
-            if (rc != Result.Success)
-                return rc;
-            if (objRefs == null || objRefs.Length == 0)
-            {
-                RhinoApp.WriteLine("Yüzey seçilmedi {0}", rc.ToString());
-                return Result.Cancel;
-            }
-
-            foreach(var obj in objRefs)
-            {
-                Mstf_Tools.SetAttributeToObjectName(obj.Object(), "kim", "Mustafa");
-                
-            }
-
-            foreach (var obj in objRefs)
-            {
-                RhinoApp.WriteLine(Mstf_Tools.GetAttributeValue(obj.Object(), "kim"  ));
-
-            }
-
-            return Result.Success;
-        }
-
     }
     
 }
