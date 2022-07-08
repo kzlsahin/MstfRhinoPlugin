@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "0SDnj+VbdY4WD9fFpu8g0hOrg9e8kWxARsFd4d43NqeVLSG5hTIlRBs3DGqCMo+D3qO5exdy3EftKSh/y0RGAw==",
+  "dgSpecHash": "qrq5BZM+VBYpilSRkktuvCi6Zj/f70FmmGNjUiB94J7L6WCKaZAcB1Z2BN7Wb4PfZ6FY9fKPnmj8HAAlfYbg6Q==",
   "success": true,
-  "projectFilePath": "C:\\MyWorkSpace\\Dotnet\\MstfRhinoPlugin\\MstfRhinoPlugin1.csproj",
+  "projectFilePath": "D:\\mustafa_workspace\\dotnet\\RhinoPlugin1\\MstfRhinoPlugin\\MstfRhinoPlugin1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\deniz\\.nuget\\packages\\rhinocommon\\7.13.21348.13001\\rhinocommon.7.13.21348.13001.nupkg.sha512"
+    "C:\\Users\\User\\.nuget\\packages\\rhinocommon\\7.13.21348.13001\\rhinocommon.7.13.21348.13001.nupkg.sha512"
   ],
   "logs": []
 }
